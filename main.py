@@ -6,8 +6,19 @@ import tensorflow as tf
 import shutil
 import numpy as np
 from loadStatic import predict, static
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Load model and static files
 
 
@@ -49,3 +60,4 @@ async def upload_wav(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
     res = await predict.prediction('/Users/flash/Desktop/EmotionsApi/'+file_path)
     return {"filename": file.filename, "path": file_path, "Emotion": res}
+    # return {"emotion":res}

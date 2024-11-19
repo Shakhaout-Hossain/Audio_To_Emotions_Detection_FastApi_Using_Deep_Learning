@@ -72,6 +72,17 @@ emotions1={1:'Neutral', 2:'Calm', 3:'Happy', 4:'Sad', 5:'Angry', 6:'Fear', 7:'Di
 async def prediction(path1):
     res = await get_predict_feat(path1)
     predictions = loaded_model.predict(res)  # Assuming predictions are probabilities for each class
+    # print(type( predictions))
+    pre = {}
+    p = int(1)
+    for i in range(8):
+        # pre[emotions1[p]]= i*100
+        # p=p+1
+        # print(emotions1[p])
+        
+        # print(predictions[0][i]*100)
+        pre[emotions1[p]]=round(predictions[0][i]*100,3)
+        p=p+1
 
     # Convert probabilities to class index
     predicted_index = np.argmax(predictions, axis=1)
@@ -80,4 +91,5 @@ async def prediction(path1):
     y_pred = [emotions1[i+1] for i in predicted_index]  # Adjust index by 1 due to emotions1 dictionary keys
     print(predicted_index)
     print(y_pred[0])  # Print the first prediction result
-    return y_pred[0]
+    # return y_pred[0]
+    return [pre,y_pred[0] ]
